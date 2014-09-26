@@ -2,13 +2,11 @@ package com.blogspot.mstachniuk.solarsystem.task01;
 
 import com.blogspot.mstachniuk.solarsystem.*;
 import com.blogspot.mstachniuk.solarsystem.vo.Distance;
-import com.blogspot.mstachniuk.solarsystem.vo.Speed;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
+import static com.blogspot.mstachniuk.solarsystem.task01.PlanetBuilder.aPlanet;
 import static org.junit.Assert.assertEquals;
 
 public class OrbitalCircumferenceCalculatorTest {
@@ -22,16 +20,11 @@ public class OrbitalCircumferenceCalculatorTest {
     public void shouldCalculateOrbitalCircumferenceForMercury() {
         // given
         OrbitalCircumferenceCalculator calculator = new OrbitalCircumferenceCalculator();
-        Planet mercury = new Planet("Mercury", RotationDirection.LEFT,
-                Distance.createFromMeter(new BigDecimal("4879400")),
-                new SiderealYear(new BigDecimal("87.96935")));
-        mercury.setAvgOrbitalSpeed(Speed.createKmPerSecond("47.362"));
-        mercury.setAcceleration(3.701);
-        Set<Gas> gases = new HashSet<>();
-        gases.add(Gas.SODIUM);
-        gases.add(Gas.OXYGEN);
-        gases.add(Gas.HYDROGEN);
-        mercury.setAtmosphereGases(gases);
+
+        Planet mercury = aPlanet()
+                .avgOrbitalSpeedInKmPerSecond("47.362")
+                .siderealYearInEarthDays("87.96935")
+                .build();
 
         // when
         Distance result = calculator.calculate(mercury);
