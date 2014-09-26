@@ -11,8 +11,9 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static com.googlecode.catchexception.CatchException.catchException;
+import static com.googlecode.catchexception.CatchException.caughtException;
+import static org.junit.Assert.assertEquals;
 
 public class PlanetLifeValidatorTest {
 
@@ -23,20 +24,17 @@ public class PlanetLifeValidatorTest {
      *  Wykorzystaj do tego celu catch-Exception
      */
     @Test
-    public void shouldThrowExceptionWhenAvgOrbitalSpeedIsGreaterThanLightSpeed() {
+    public void shouldThrowExceptionWhenAvgOrbitalSpeedIsGreaterThanLightSpeed() throws InvalidPlanetSpeed {
         // given
         PlanetLifeValidator validator = new PlanetLifeValidator();
         Planet planet = examplePlanet();
         planet.setAvgOrbitalSpeed(Speed.createKmPerSecond("310000")); // Greater Than 299 792 458 m/s
 
-        try {
-            // when
-            validator.canBeLife(planet);
-            fail("It should throw Exception, because planet orbital speed can't be greater than light speed");
-        } catch (InvalidPlanetSpeed e) {
-            // then
-            assertTrue(true);
-        }
+        // when
+        catchException(validator).canBeLife(planet);
+
+        // then
+        assertEquals(InvalidPlanetSpeed.class, caughtException().getClass());
     }
 
     private Planet examplePlanet() {
