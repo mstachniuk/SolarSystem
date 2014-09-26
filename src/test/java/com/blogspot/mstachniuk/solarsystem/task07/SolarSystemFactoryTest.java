@@ -29,41 +29,32 @@ public class SolarSystemFactoryTest {
 
         // then
         Planet mercury = innerPlanets.get(0);
-        assertEquals("Mercury", mercury.getName());
-        assertEquals(RotationDirection.LEFT, mercury.getRotationDirection());
-        assertEquals(0, new BigDecimal("4879400").compareTo(mercury.getDiameter().getMeter()));
-        assertEquals(0, new BigDecimal("87.96935").compareTo(mercury.getSiderealYear().inEarthDays()));
-        assertEquals(3.701, mercury.getAcceleration(), 0.01);
-        Set<Gas> mercuryGases = Stream.of(Gas.OXYGEN, Gas.SODIUM, Gas.HYDROGEN).collect(Collectors.toSet());
-        assertEquals(mercuryGases, mercury.getAtmosphereGases());
+        assertPlanet(mercury, "Mercury", RotationDirection.LEFT, "4879400", "87.96935", "47.362",
+                3.701, Gas.OXYGEN, Gas.SODIUM, Gas.HYDROGEN);
 
         Planet venus = innerPlanets.get(1);
-        assertEquals("Venus", venus.getName());
-        assertEquals(RotationDirection.RIGHT, venus.getRotationDirection());
-        assertEquals(0, new BigDecimal("12103700").compareTo(venus.getDiameter().getMeter()));
-        assertEquals(0, new BigDecimal("224.70096").compareTo(venus.getSiderealYear().inEarthDays()));
-        assertEquals(8.87, venus.getAcceleration(), 0.01);
-        Set<Gas> venusGases = Stream.of(Gas.CARBON_DIOXIDE, Gas.NITROGEN).collect(Collectors.toSet());
-        assertEquals(venusGases, venus.getAtmosphereGases());
+        assertPlanet(venus, "Venus", RotationDirection.RIGHT, "12103700", "224.70096", "35.02",
+                8.87, Gas.CARBON_DIOXIDE, Gas.NITROGEN);
 
         Planet earth = innerPlanets.get(2);
-        assertEquals("Earth", earth.getName());
-        assertEquals(RotationDirection.LEFT, earth.getRotationDirection());
-        assertEquals(0, new BigDecimal("12756273").compareTo(earth.getDiameter().getMeter()));
-        assertEquals(0, new BigDecimal("365.256363004").compareTo(earth.getSiderealYear().inEarthDays()));
-        assertEquals(9.806_65, earth.getAcceleration(), 0.01);
-        Set<Gas> earthGases = Stream.of(Gas.NITROGEN, Gas.OXYGEN, Gas.CARBON_DIOXIDE, Gas.ARGON).collect(Collectors.toSet());
-        assertEquals(earthGases, earth.getAtmosphereGases());
+        assertPlanet(earth, "Earth", RotationDirection.LEFT, "12756273", "365.256363004", "29.78",
+                9.806_65, Gas.NITROGEN, Gas.OXYGEN, Gas.CARBON_DIOXIDE, Gas.ARGON);
 
         Planet mars = innerPlanets.get(3);
-        assertEquals("Mars", mars.getName());
-        assertEquals(RotationDirection.LEFT, mars.getRotationDirection());
-        assertEquals(0, new BigDecimal("6804900").compareTo(mars.getDiameter().getMeter()));
-        assertEquals(0, new BigDecimal("686.9601").compareTo(mars.getSiderealYear().inEarthDays()));
-        assertEquals(3.69, mars.getAcceleration(), 0.01);
-        Set<Gas> marsGases = Stream.of(Gas.CARBON_DIOXIDE, Gas.NITROGEN).collect(Collectors.toSet());
-        assertEquals(marsGases, mars.getAtmosphereGases());
-
+        assertPlanet(mars, "Mars", RotationDirection.LEFT, "6804900", "686.9601", "24.077",
+                3.69, Gas.CARBON_DIOXIDE, Gas.NITROGEN);
     }
 
+    private void assertPlanet(Planet planet, String planetName, RotationDirection direction, String diameterInMeter,
+                              String yearInEarthDays, String avgOrbitalSpeedInKmPerSecond, double acceleration,
+                              Gas... atmosphereGases) {
+        assertEquals(planetName, planet.getName());
+        assertEquals(direction, planet.getRotationDirection());
+        assertEquals(0, new BigDecimal(diameterInMeter).compareTo(planet.getDiameter().getMeter()));
+        assertEquals(0, new BigDecimal(yearInEarthDays).compareTo(planet.getSiderealYear().inEarthDays()));
+        assertEquals(0, new BigDecimal(avgOrbitalSpeedInKmPerSecond).compareTo(planet.getAvgOrbitalSpeed().getKmPerSecond()));
+        assertEquals(acceleration, planet.getAcceleration(), 0.01);
+        Set<Gas> expectedGases = Stream.of(atmosphereGases).collect(Collectors.toSet());
+        assertEquals(expectedGases, planet.getAtmosphereGases());
+    }
 }
