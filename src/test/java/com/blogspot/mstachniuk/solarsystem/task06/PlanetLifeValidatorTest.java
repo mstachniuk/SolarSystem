@@ -11,8 +11,7 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
 
 public class PlanetLifeValidatorTest {
 
@@ -29,14 +28,11 @@ public class PlanetLifeValidatorTest {
         Planet planet = examplePlanet();
         planet.setAvgOrbitalSpeed(Speed.createKmPerSecond("310000")); // Greater Than 299 792 458 m/s
 
-        try {
-            // when
-            validator.canBeLife(planet);
-            fail("It should throw Exception, because planet orbital speed can't be greater than light speed");
-        } catch (InvalidPlanetSpeed e) {
-            // then
-            assertTrue(true);
-        }
+        // when
+        Throwable throwable = ThrowableCaptor.captureThrowable(() -> validator.canBeLife(planet));
+
+        // then
+        assertEquals(InvalidPlanetSpeed.class, throwable.getClass());
     }
 
     private Planet examplePlanet() {
