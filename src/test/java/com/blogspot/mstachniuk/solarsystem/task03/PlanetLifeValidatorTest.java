@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class PlanetLifeValidatorTest {
@@ -20,21 +19,18 @@ public class PlanetLifeValidatorTest {
      *  Zrefaktoruj poniższy test, aby był bardziej czytelny.
      *  Wykorzystaj do tego celu expected w @Test
      */
-    @Test
-    public void shouldThrowExceptionWhenAvgOrbitalSpeedIsGreaterThanLightSpeed() {
+    @Test(expected = InvalidPlanetSpeed.class)
+    public void shouldThrowExceptionWhenAvgOrbitalSpeedIsGreaterThanLightSpeed() throws InvalidPlanetSpeed {
         // given
         PlanetLifeValidator validator = new PlanetLifeValidator();
         Planet planet = examplePlanet();
         planet.setAvgOrbitalSpeed(Speed.createKmPerSecond("310000")); // Greater Than 299 792 458 m/s
 
-        try {
-            // when
-            validator.canBeLife(planet);
-            fail("It should throw Exception, because planet orbital speed can't be greater than light speed");
-        } catch (InvalidPlanetSpeed e) {
-            // then
-            assertTrue(true);
-        }
+        // when
+        validator.canBeLife(planet);
+
+        // then
+        fail("It should throw Exception, because planet orbital speed can't be greater than light speed");
     }
 
     private Planet examplePlanet() {
