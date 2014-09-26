@@ -2,9 +2,13 @@ package com.blogspot.mstachniuk.solarsystem;
 
 import com.blogspot.mstachniuk.solarsystem.vo.Distance;
 import com.blogspot.mstachniuk.solarsystem.vo.Speed;
+import lombok.AllArgsConstructor;
+import lombok.experimental.Builder;
 
 import java.util.Set;
 
+@Builder
+@AllArgsConstructor
 public class Planet {
 
     private final String name;
