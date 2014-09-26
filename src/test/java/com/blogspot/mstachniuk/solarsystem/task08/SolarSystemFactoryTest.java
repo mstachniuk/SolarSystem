@@ -6,13 +6,17 @@ import com.blogspot.mstachniuk.solarsystem.RotationDirection;
 import com.blogspot.mstachniuk.solarsystem.task07.SolarSystemFactory;
 import org.junit.Test;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
+import static com.blogspot.mstachniuk.solarsystem.task08.PlanetAccelerationMatcher.acceleration;
+import static com.blogspot.mstachniuk.solarsystem.task08.PlanetAvgOrbitalSpeedMatcher.avgOrbitalSpeedInKmPerSecond;
+import static com.blogspot.mstachniuk.solarsystem.task08.PlanetDiameterMatcher.diameterInMeter;
+import static com.blogspot.mstachniuk.solarsystem.task08.PlanetGasHasOnlyMatcher.hasOnlyGases;
+import static com.blogspot.mstachniuk.solarsystem.task08.PlanetNameMatcher.name;
+import static com.blogspot.mstachniuk.solarsystem.task08.PlanetRotationDirectionMatcher.rotation;
+import static com.blogspot.mstachniuk.solarsystem.task08.PlanetYearLongMatcher.yearLongInEarthDays;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 public class SolarSystemFactoryTest {
 
@@ -50,13 +54,12 @@ public class SolarSystemFactoryTest {
     private void assertPlanet(Planet planet, String planetName, RotationDirection direction, String diameterInMeter,
                               String yearInEarthDays, String avgOrbitalSpeedInKmPerSecond, double acceleration,
                               Gas... atmosphereGases) {
-        assertEquals(planetName, planet.getName());
-        assertEquals(direction, planet.getRotationDirection());
-        assertEquals(0, new BigDecimal(diameterInMeter).compareTo(planet.getDiameter().getMeter()));
-        assertEquals(0, new BigDecimal(yearInEarthDays).compareTo(planet.getSiderealYear().inEarthDays()));
-        assertEquals(0, new BigDecimal(avgOrbitalSpeedInKmPerSecond).compareTo(planet.getAvgOrbitalSpeed().getKmPerSecond()));
-        assertEquals(acceleration, planet.getAcceleration(), 0.01);
-        Set<Gas> expectedGases = Stream.of(atmosphereGases).collect(Collectors.toSet());
-        assertEquals(expectedGases, planet.getAtmosphereGases());
+        assertThat(planet, is(name(planetName)));
+        assertThat(planet, is(rotation(direction)));
+        assertThat(planet, is(diameterInMeter(diameterInMeter)));
+        assertThat(planet, is(yearLongInEarthDays(yearInEarthDays)));
+        assertThat(planet, is(avgOrbitalSpeedInKmPerSecond(avgOrbitalSpeedInKmPerSecond)));
+        assertThat(planet, is(acceleration(acceleration)));
+        assertThat(planet, is(hasOnlyGases(atmosphereGases)));
     }
 }
