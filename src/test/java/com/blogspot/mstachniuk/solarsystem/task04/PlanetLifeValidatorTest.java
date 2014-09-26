@@ -7,7 +7,9 @@ import com.blogspot.mstachniuk.solarsystem.task03.InvalidPlanetSpeed;
 import com.blogspot.mstachniuk.solarsystem.task03.PlanetLifeValidator;
 import com.blogspot.mstachniuk.solarsystem.vo.Distance;
 import com.blogspot.mstachniuk.solarsystem.vo.Speed;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.math.BigDecimal;
 
@@ -16,6 +18,9 @@ import static org.junit.Assert.fail;
 
 public class PlanetLifeValidatorTest {
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     /**
      *  Task 04: Testowanie wyjątków jest problematyczne. Nie wiadomo gdzie umieścić when i then i ten brzydki
      *  assertTrue(true)...
@@ -23,20 +28,18 @@ public class PlanetLifeValidatorTest {
      *  Wykorzystaj do tego celu JUnit Rule
      */
     @Test
-    public void shouldThrowExceptionWhenAvgOrbitalSpeedIsGreaterThanLightSpeed() {
+    public void shouldThrowExceptionWhenAvgOrbitalSpeedIsGreaterThanLightSpeed() throws InvalidPlanetSpeed {
         // given
         PlanetLifeValidator validator = new PlanetLifeValidator();
         Planet planet = examplePlanet();
         planet.setAvgOrbitalSpeed(Speed.createKmPerSecond("310000")); // Greater Than 299 792 458 m/s
+        thrown.expect(InvalidPlanetSpeed.class);
 
-        try {
-            // when
-            validator.canBeLife(planet);
-            fail("It should throw Exception, because planet orbital speed can't be greater than light speed");
-        } catch (InvalidPlanetSpeed e) {
-            // then
-            assertTrue(true);
-        }
+        // when
+        validator.canBeLife(planet);
+
+        // then
+        fail("It should throw Exception, because planet orbital speed can't be greater than light speed");
     }
 
     private Planet examplePlanet() {
